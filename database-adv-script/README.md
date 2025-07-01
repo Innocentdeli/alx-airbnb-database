@@ -125,3 +125,68 @@ WHERE
 ```
 
 ---
+
+# 📘 SQL Subqueries: Correlated and Non-Correlated
+
+This document explains how to write and understand **non-correlated** and **correlated** subqueries in SQL, including the use of the `IN` clause.
+
+---
+
+##  1. Non-Correlated Subquery – Properties with High Ratings
+
+###  Objective:
+
+Find all properties where the **average rating is greater than 4.0**.
+
+###  Simple Explanation:
+
+* First, look at the `reviews` table.
+* For each `property_id`, calculate the average rating.
+* Keep only property\_ids with an average above 4.
+* Then go to the `properties` table and return details for only those matching property IDs.
+
+###  Query:
+
+```sql
+SELECT property_id, name, location, pricepernight
+FROM properties
+WHERE property_id IN (
+  SELECT property_id
+  FROM reviews
+  GROUP BY property_id
+  HAVING AVG(rating) > 4.0
+);
+```
+
+###  What is `IN` Doing?
+
+The `IN` clause checks if a value (here, `property_id`) exists **in the list of values** returned by the subquery.
+
+> It's like asking: "Is this property in the list of highly-rated properties?"
+
+---
+
+##  2. Correlated Subquery – Users with More Than 3 Bookings
+
+###  Objective:
+
+Find all users who have made **more than 3 bookings**.
+
+###  Simple Explanation:
+
+* Go through each user.
+* For that user, count how many bookings they made by checking the `bookings` table.
+* If that number is greater than 3, show that user.
+
+###  Query:
+
+```sql
+SELECT user_id, first_name, last_name, email
+FROM users u
+WHERE (
+  SELECT COUNT(*)
+  FROM bookings b
+  WHERE b.user_id = u.user_id
+) > 3;
+```
+
