@@ -28,10 +28,13 @@ SELECT
   reviews.rating,
   reviews.comment,
   reviews.created_at AS review_date
-FROM 
+FROM
   properties
-LEFT JOIN 
-  reviews ON properties.property_id = reviews.property_id;
+LEFT JOIN
+  reviews ON properties.property_id = reviews.property_id
+ORDER BY
+  reviews.created_at DESC;
+
 
 #Full outer join
 SELECT 
