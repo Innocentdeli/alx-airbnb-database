@@ -12,3 +12,11 @@ CREATE INDEX idx_properties_property_id ON properties(property_id);
 CREATE INDEX idx_properties_location ON properties(location);
 CREATE INDEX idx_properties_price ON properties(price);
 
+
+EXPLAIN ANALYZE
+SELECT p.property_id, COUNT(*) 
+FROM bookings b
+JOIN properties p ON b.property_id = p.property_id
+GROUP BY p.property_id
+ORDER BY COUNT(*) DESC;
+
